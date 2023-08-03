@@ -25,7 +25,7 @@ const router = express.Router();
 router.post("/createsinglechat", auth, createSingleChat);
 router.get("/getchatbyuser", auth, getChatbyuser);
 router.get("/getchatbyid/:id", auth, getChatbyId);
-
+ 
 //group chat//
 router.post("/creategroupchat", auth, createGroup);
 router.put("/updategroupchat/:id", auth, updateGroupChat);
