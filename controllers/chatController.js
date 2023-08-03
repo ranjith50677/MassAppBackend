@@ -143,9 +143,9 @@ export const getGroupChatbyUser = async (req, res) => {
     if (!chats) {
       return res.status(400).json({ message: "Chats not found" });
     }
-    let forMap = [];
-    forMap.push(chat);
-    let chat = forMap.map((chat) => {
+    // let forMap = [];
+    // forMap.push(chat);
+    let chat = chats.map((chat) => {
       let usering;
       if (chat.isGroup === true) {
         usering = chat.users.filter((user) => user._id.toString() === userId);
@@ -177,9 +177,9 @@ export const getGroupChatbyId = async (req, res) => {
   if (!chats) {
     return res.status(400).json({ message: "Chats not found" });
   }
-  let forMap = [];
-  forMap.push(chat);
-  let chat = forMap.map((chat) => {
+  // let forMap = [];
+    // forMap.push(chat);
+  let chat = chats.map((chat) => {
     let usering;
     if (chat.isGroup === true) {
       usering = chat.users.filter((user) => user._id.toString() === userId);
