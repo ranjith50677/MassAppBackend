@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.put("/createmessage/:id", auth, createMessage);
-router.put("/updatemessage/:id", auth, updateMessage);
+router.put("/updatemessage/:id", auth, updateMessage); 
 router.delete("/deletemessage/:id", auth, deleteMessage);
 router.get("/getmessage/:id", auth, getMessage);
 
