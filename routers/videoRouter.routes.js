@@ -3,6 +3,7 @@ import {
   createVideo,
   getAllVideos,
   getVideoById,
+  getVideoByUser,
   updateVideoById,
   deleteVideoById,
   likeVideo,
@@ -29,7 +30,9 @@ router.get("/all", getAllVideos);
 router.get("/:id", getVideoById);
 router.put("/update/:id", updateVideoById);
 router.delete("/delete/:id", deleteVideoById);
-router.get("/user/:id", getVideoByUserId);
+router.get("/user/byid/:id", getVideoByUserId);
+router.get("/getvideo/user", auth, getVideoByUser);
+
 
 //Like routes//
 

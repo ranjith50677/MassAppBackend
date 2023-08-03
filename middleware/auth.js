@@ -6,7 +6,7 @@ const auth = async (req, res, next) => {
     let token = req.header("token");
     if (!token)
       return res.status(400).json({ message: "Invalid Authentication" });
-    let decoded = jwt.verify(token, process.env.JWT);
+    const decoded = jwt.verify(token, process.env.JWT);
     if (!decoded)
       return res.status(400).json({ message: "Invalid Authentication" });
     let user = await User.findOne({ _id: decoded.id });

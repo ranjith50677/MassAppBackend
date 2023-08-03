@@ -170,9 +170,8 @@ export const getOwner = async (req, res) => {
 
 export const profile = async (req, res) => {
   try {
-    const view = await User.findById({ _id: req.user.id })
-      .populate("profilePicture")
-      .select("-password");
+    const id = req.params.id;
+    const view = await User.findById({ _id: id }).select("-password");
     if (!view) return res.status(404).json({ message: "user not found" });
     res.status(200).json({ data: view });
   } catch (error) {
@@ -208,12 +207,12 @@ export const followingUser = async (req, res) => {
       return res.status(400).json({ message: "You already followed" });
     }
     let same = await User.findOne({ id: req.params.id });
-     const sameUser = same.following.find(
-       (following) => following.toString() === req.params.id
-     );
-     if (sameUser) {
-       return res.status(400).json({ message: "You can't follow yourself" });
-     }
+    const sameUser = same.following.find(
+      (following) => following.toString() === req.params.id
+    );
+    if (sameUser) {
+      return res.status(400).json({ message: "You can't follow yourself" });
+    }
     let user = await User.findByIdAndUpdate(
       { _id: req.params.id },
       {

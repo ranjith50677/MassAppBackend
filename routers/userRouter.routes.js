@@ -15,13 +15,14 @@ import {
   getFollowers,
   getFollowing,
 } from "../controllers/userController.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
 //User routes//
 router.post("/reg", reg);
 router.post("/login", login);
-router.get("/all", getAllUsers);
+router.get("/alluser", getAllUsers);
 router.get("/:id", getUserById);
 router.put("/update/:id", updateUserById);
 router.delete("/delete/:id", deleteUserById);
@@ -31,13 +32,13 @@ router.post("/ownerreg", OwnerReg);
 router.get("/owner", getOwner);
 
 //Profile routes//
-router.get("/profile", profile);
-router.put("/updateprofile", updateProfile);
+router.get("/profile/:id", auth, profile);
+router.put("/updateprofile", auth, updateProfile);
 
 //Follow routes//
-router.put("/follow/:id", followingUser);
-router.put("/unfollow/:id", unfollowingUser);
-router.get("/followers/:id", getFollowers);
-router.get("/following/:id", getFollowing);
+router.put("/follow/:id", auth, followingUser);
+router.put("/unfollow/:id", auth, unfollowingUser);
+router.get("/followers/:id", auth, getFollowers);
+router.get("/following/:id", auth, getFollowing);
 
 export default router;

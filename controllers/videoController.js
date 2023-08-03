@@ -22,7 +22,7 @@ export const createVideo = async (req, res) => {
 
 export const getAllVideos = async (req, res) => {
   try {
-    let videos = await Video.find().populate("postedBy", "username");
+    let videos = await Video.find().populate("postedBy").populate("comments.postedBy");
     res.status(200).json({ videos });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -32,8 +32,8 @@ export const getAllVideos = async (req, res) => {
 export const getVideoById = async (req, res) => {
   try {
     let video = await Video.findById(req.params.id)
-      .populate("postedBy", "username")
-      .populate("comments.postedBy", "username");
+      .populate("postedBy")
+      .populate("comments.postedBy");
     res.status(200).json({ video });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -227,9 +227,8 @@ export const getVideoByCategory = async (req, res) => {
 export const getVideoByUser = async (req, res) => {
   try {
     let videos = await Video.find({ postedBy: req.user._id }).populate(
-      "postedBy",
-      "username"
-    );
+      "postedBy"
+    ).populate("comments.postedBy");
     res.status(200).json({ videos });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -237,11 +236,11 @@ export const getVideoByUser = async (req, res) => {
 };
 
 export const getVideoByUserId = async (req, res) => {
+
   try {
-    let videos = await Video.find({ postedBy: req.params._id }).populate(
-      "postedBy",
-      "username"
-    );
+    let videos = await Video.find({ postedBy: req.params.id }).populate(
+      "postedBy"
+    ).populate("comments.postedBy");
     res.status(200).json({ videos });
   } catch (error) {
     res.status(400).json({ message: error.message });

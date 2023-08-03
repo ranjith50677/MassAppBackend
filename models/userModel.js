@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default:"https://res.cloudinary.com/demxjipir/image/upload/v1689224996/cld-sample.jpg",
+      default:"https://res.cloudinary.com/demxjipir/image/upload/v1690887105/Profile%20Images%20Mass_APP/bfihpwhhbhyiytmhj36b.jpg",
     },
     lastSeen: {
       type: Date,

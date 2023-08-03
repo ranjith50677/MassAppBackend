@@ -71,6 +71,21 @@ export const getChatbyuser = async (req, res) => {
   }
 };
 
+export const getChat = async (req, res) => {
+  const id = req.params.id;
+  try {
+  const chat = await Chat.findById({ _id: id })
+  .populate("users", "name lastname username profilePicture")
+  .populate("messages", "message sendby createdAt")
+  .populate({ path: "messages", populate: { path: "sendby",select:"_id username" }})
+  if (!chat) {
+  return res.status(400).json({ message: "Chat not found" });
+  }
+  return res.status(200).json(chat);
+  } catch (error) {
+  return res.status(500).json({ message: error.message });
+  }
+  };
 export const getChatbyId = async (req, res) => {
   const chatId = req.params.id;
   const userId = req.user.id;
