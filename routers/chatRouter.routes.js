@@ -14,6 +14,8 @@ import {
     getChatbyId,
     updateDp,
     createSingleChat,
+    getGroupChatbyUser,
+    getGroupChatbyId
 } from "../controllers/chatController.js";
 import auth from "../middleware/auth.js";
 
@@ -27,6 +29,8 @@ router.get("/getchatbyid/:id", auth, getChatbyId);
 //group chat//
 router.post("/creategroupchat", auth, createGroup);
 router.put("/updategroupchat/:id", auth, updateGroupChat);
+router.get("/getgroupchatbyuser", auth, getGroupChatbyUser);
+router.get("/getgroupchatbyid/:id", auth, getGroupChatbyId);
 router.put("/updatedp/:id", auth, updateDp);
 router.post("/addmessage/:id", auth, addMessage);
 router.delete("/deletemessage/:id", auth, deleteMessage);

@@ -133,6 +133,73 @@ export const createGroup = async (req, res) => {
   }
 };
 
+export const getGroupChatbyUser = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const chats = await Chat.find({ users: userId, isGroup: true })
+      .populate("users", "name lastname username profilePicture")
+      .populate("messages", "message sendby createdAt")
+      .populate({ path: "messages", populate: { path: "sendby",select:"_id username" } });
+    if (!chats) {
+      return res.status(400).json({ message: "Chats not found" });
+    }
+    let forMap = [];
+    forMap.push(chat);
+    let chat = forMap.map((chat) => {
+      let usering;
+      if (chat.isGroup === true) {
+        usering = chat.users.filter((user) => user._id.toString() === userId);
+      } 
+      return {
+        _id: chat._id,
+        users: usering,
+        groupName: chat.groupName,
+        messages: chat.messages,
+        updatedAt: chat.updatedAt,
+        groupDp: chat.groupDp,
+        isGroup: chat.isGroup,
+      };
+    });
+    return res.status(200).json(chat);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getGroupChatbyId = async (req, res) => {
+  const chatId = req.params.id;
+  const userId = req.user.id;
+  try {
+    const chats = await Chat.find(chatId ,{ isGroup: true })
+    .populate("users", "name lastname username profilePicture")
+    .populate("messages", "message sendby createdAt")
+    .populate({ path: "messages", populate: { path: "sendby",select:"_id username" } });
+  if (!chats) {
+    return res.status(400).json({ message: "Chats not found" });
+  }
+  let forMap = [];
+  forMap.push(chat);
+  let chat = forMap.map((chat) => {
+    let usering;
+    if (chat.isGroup === true) {
+      usering = chat.users.filter((user) => user._id.toString() === userId);
+    } 
+    return {
+      _id: chat._id,
+      users: usering,
+      groupName: chat.groupName,
+      messages: chat.messages,
+      updatedAt: chat.updatedAt,
+      groupDp: chat.groupDp,
+      isGroup: chat.isGroup,
+    };
+  });
+  return res.status(200).json(chat);
+} catch (error) {
+  return res.status(500).json({ message: error.message });
+}
+};
+
 export const updateGroupChat = async (req, res) => {
   const groupId = req.params.id;
   const { groupName, users } = req.body;
