@@ -208,8 +208,8 @@ export const followingUser = async (req, res) => {
       return res.status(400).json({ message: "You already followed" });
     }
     let same = await User.findOne({ id: req.params.id });
-    const sameUser = same.following.find(
-      (following) => following.toString() === req.params.id
+    const sameUser = same?.following.find(
+      (follow) => follow.toString() === req.params.id
     );
     if (sameUser) {
       return res.status(400).json({ message: "You can't follow yourself" });
@@ -238,30 +238,28 @@ export const followingUser = async (req, res) => {
 
 export const unfollowingUser = async (req, res) => {
   try {
-    const following = req.user.id;
-    let check = await user.findOne({
-      _id: req.params.id,
-      following: { $in: [following] },
+    let check = await User.findOne({
+      _id:req.user.id,
+      following: req.params.id,
     });
     if (!check) {
       return res.status(400).json({ message: "You already unfollowed" });
     }
     let user = await User.findByIdAndUpdate(
-      req.params.id,
+      req.user.id,
       {
-        $pull: { following: following },
+        $pull: { following: req.params.id },
       },
       { new: true }
     );
     if (user) {
       let follow = await User.findByIdAndUpdate(
-        req.user.id,
+        req.params.id,
         {
-          $pull: { following: req.params.id },
+          $pull: { followers: req.user.id },
         },
         { new: true }
       );
-      res.status(200).json({ message: "you Unfollowed this user", follow });
     }
     res.status(200).json({ message: "user unFollowing you", user });
   } catch (error) {
