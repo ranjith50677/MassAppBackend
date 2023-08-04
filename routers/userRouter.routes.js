@@ -8,7 +8,7 @@ import {
   deleteUserById,
   getAllUsers,
   getOwner,
-  profile,
+  Profile,
   updateProfile,
   followingUser,
   unfollowingUser,
@@ -18,6 +18,11 @@ import {
 import auth from "../middleware/auth.js";
 
 const router = express.Router();
+
+
+//Profile routes//
+router.get("/profile",auth, Profile);
+router.put("/updateprofile", auth, updateProfile);
 
 //User routes//
 router.post("/reg", reg);
@@ -31,9 +36,6 @@ router.delete("/delete/:id", deleteUserById);
 router.post("/ownerreg", OwnerReg);
 router.get("/owner", getOwner);
 
-//Profile routes//
-router.get("/profile/:id", auth, profile);
-router.put("/updateprofile", auth, updateProfile);
 
 //Follow routes//
 router.put("/follow/:id", auth, followingUser);

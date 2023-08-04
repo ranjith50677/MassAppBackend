@@ -168,9 +168,10 @@ export const getOwner = async (req, res) => {
 
 //Profile routes//
 
-export const profile = async (req, res) => {
+export const Profile = async (req, res) => {
   try {
-    const id = req.params.id;
+    console.log(req.user);
+    const id = req.user._id;
     const view = await User.findById({ _id: id }).select("-password");
     if (!view) return res.status(404).json({ message: "user not found" });
     res.status(200).json({ data: view });

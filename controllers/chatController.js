@@ -105,7 +105,7 @@ export const getChatbyId = async (req, res) => {
         usering = chat.users.filter((user) => user._id.toString() !== userId);
       }
       if (chat.isGroup === true) {
-        usering = chat.users.filter((user) => user._id.toString() === userId);
+        usering = chat.users.filter((user) => user._id.toString() !== userId);
       }
       return {
         _id: chat._id,
@@ -163,7 +163,7 @@ export const getGroupChatbyUser = async (req, res) => {
     let chat = chats.map((chat) => {
       let usering;
       if (chat.isGroup === true) {
-        usering = chat.users.filter((user) => user._id.toString() === userId);
+        usering = chat.users.filter((user) => user._id.toString() !== userId);
       } 
       return {
         _id: chat._id,
@@ -192,12 +192,12 @@ export const getGroupChatbyId = async (req, res) => {
   if (!chats) {
     return res.status(400).json({ message: "Chats not found" });
   }
-  // let forMap = [];
-    // forMap.push(chat);
+  let forMap = [];
+    forMap.push(chats);
   let chat = chats.map((chat) => {
     let usering;
     if (chat.isGroup === true) {
-      usering = chat.users.filter((user) => user._id.toString() === userId);
+      usering = chat.users.filter((user) => user._id.toString() !== userId);
     } 
     return {
       _id: chat._id,
