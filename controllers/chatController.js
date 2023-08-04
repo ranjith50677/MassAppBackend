@@ -194,7 +194,7 @@ export const getGroupChatbyId = async (req, res) => {
   }
   let forMap = [];
     forMap.push(chats);
-  let chat = chats.map((chat) => {
+  let chat = forMap?.map((chat) => {
     let usering;
     if (chat.isGroup === true) {
       usering = chat.users.filter((user) => user._id.toString() !== userId);
