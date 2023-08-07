@@ -325,9 +325,7 @@ export const removeGroupUser = async (req, res) => {
     for (const data of iterator) {
       chat?.users?.pull(data);
     }
-    if(chat.users !== userId){
-      return res.status(400).json({ message: "User already removed" });
-    }
+  
     await chat.save();
     return res.status(200).json({ message: "Group users removed successfully" });
   } catch (error) {
