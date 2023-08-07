@@ -40,7 +40,7 @@ router.put("/updatemessage/:id", auth, updateMessage);
 router.post("/addadmin/:id", auth, addGroupAdmin);
 router.delete("/removeadmin/:id", auth, removeGroupAdmin);
 router.post("/adduser/:id", auth, addGroupUser);
-router.delete("/removeuser/:id", auth, removeGroupUser);
+router.put("/removeuser/:id", auth, removeGroupUser);
 
 //common for both single and group chat//
 router.delete("/deletechat/:id", auth, deleteChat);
