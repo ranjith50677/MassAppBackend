@@ -289,12 +289,20 @@ export const removeGroupAdmin = async (req, res) => {
 export const addGroupUser = async (req, res) => {
   const groupId = req.params.id;
   const userId = req.body.userId;
-  let data = userId?.map(()=>{
-    return userId
-  })
+ if(userId === req.user.id){
+    return res.status(400).json({message: "You can't add yourself"})
+  }
+  const chat = await Chat.findById(groupId);
+  if (chat?.users?.includes(userId)) {
+    return res.status(400).json({ message: "User already added" });
+  }
   try {
     const chat = await Chat.findById(groupId);
-    chat.users.push(data);
+
+    const iterator = userId.values();
+    for (const data of iterator) {
+      chat.users.push(data);
+    }
     await chat.save();
     return res.status(200).json({ message: "Group user added successfully" });
   } catch (error) {
