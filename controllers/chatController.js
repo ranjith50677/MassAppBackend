@@ -197,7 +197,7 @@ export const getGroupChatbyId = async (req, res) => {
   const chatId = req.params.id;
   const userId = req.user.id;
   try {
-    const chats = await Chat.findById({chatId,  isGroup: true })
+    const chats = await Chat.findById(chatId, { isGroup: true })
       .populate("users", "name lastname username profilePicture")
       .populate("messages", "message sendby createdAt")
       .populate({
@@ -289,8 +289,8 @@ export const removeGroupAdmin = async (req, res) => {
 export const addGroupUser = async (req, res) => {
   const groupId = req.params.id;
   const userId = req.body.userId;
- if(userId === req.user.id){
-    return res.status(400).json({message: "You can't add yourself"})
+  if (userId === req.user.id) {
+    return res.status(400).json({ message: "You can't add yourself" });
   }
   const chat = await Chat.findById(groupId);
   if (chat?.users?.includes(userId)) {
@@ -317,15 +317,16 @@ export const removeGroupUser = async (req, res) => {
     if (userId === req.user.id) {
       return res.status(400).json({ message: "You can't remove yourself" });
     }
-    const chat = await Chat.findById(groupId);
-    const index = chat.users.indexOf(userId);
-    chat.users.splice(index, 1);
+    const chat = await Chat.findById(groupId,{
+      $pull: { users: userId },
+    });
     await chat.save();
-    return res.status(200).json({ message: "Group user removed successfully" });
+    return res.status(200).json({ message: "Group users removed successfully" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 export const addMessage = async (req, res) => {
   const message = req.body.message;
