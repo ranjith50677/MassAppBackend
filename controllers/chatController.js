@@ -303,7 +303,7 @@ export const removeGroupUser = async (req, res) => {
   const groupId = req.params.id;
   const { userId } = req.body;
   try {
-    if (userId === req.body.id) {
+    if (userId === req.user.id) {
       return res.status(400).json({ message: "You can't remove yourself" });
     }
     const chat = await Chat.findById(groupId);
