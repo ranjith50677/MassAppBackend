@@ -197,7 +197,7 @@ export const getGroupChatbyId = async (req, res) => {
   const chatId = req.params.id;
   const userId = req.user.id;
   try {
-    const chats = await Chat.findById({chatId,  isGroup: true })
+    const chats = await Chat.findById(chatId,  {isGroup: true })
       .populate("users", "name lastname username profilePicture")
       .populate("messages", "message sendby createdAt")
       .populate({
@@ -289,9 +289,10 @@ export const removeGroupAdmin = async (req, res) => {
 export const addGroupUser = async (req, res) => {
   const groupId = req.params.id;
   const userId = req.body.userId;
-  let data = userId?.map(()=>{
-    return userId
+  let data= userId?.map((i)=>{
+   return i;
   })
+  console.log(data);
   try {
     const chat = await Chat.findById(groupId);
     chat.users.push(data);
