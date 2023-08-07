@@ -42,8 +42,11 @@ export const getChatbyuser = async (req, res) => {
   try {
     const chats = await Chat.find({ users: userId })
       .populate("users", "name lastname username profilePicture")
-      .populate("messages", "message sendby createdAt") 
-      .populate({ path: "messages", populate: { path: "sendby",select:"_id username" } })  
+      .populate("messages", "message sendby createdAt")
+      .populate({
+        path: "messages",
+        populate: { path: "sendby", select: "_id username" },
+      });
     if (!chats) {
       return res.status(400).json({ message: "Chats not found" });
     }
@@ -74,18 +77,21 @@ export const getChatbyuser = async (req, res) => {
 export const getChat = async (req, res) => {
   const id = req.params.id;
   try {
-  const chat = await Chat.findById({ _id: id })
-  .populate("users", "name lastname username profilePicture")
-  .populate("messages", "message sendby createdAt")
-  .populate({ path: "messages", populate: { path: "sendby",select:"_id username" }})
-  if (!chat) {
-  return res.status(400).json({ message: "Chat not found" });
-  }
-  return res.status(200).json(chat);
+    const chat = await Chat.findById({ _id: id })
+      .populate("users", "name lastname username profilePicture")
+      .populate("messages", "message sendby createdAt")
+      .populate({
+        path: "messages",
+        populate: { path: "sendby", select: "_id username" },
+      });
+    if (!chat) {
+      return res.status(400).json({ message: "Chat not found" });
+    }
+    return res.status(200).json(chat);
   } catch (error) {
-  return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
-  };
+};
 export const getChatbyId = async (req, res) => {
   const chatId = req.params.id;
   const userId = req.user.id;
@@ -93,7 +99,10 @@ export const getChatbyId = async (req, res) => {
     const chat = await Chat.findById({ _id: chatId })
       .populate("users", "name lastname username profilePicture")
       .populate("messages", "message sendby createdAt")
-      .populate({ path: "messages", populate: { path: "sendby",select:"_id username" } });
+      .populate({
+        path: "messages",
+        populate: { path: "sendby", select: "_id username" },
+      });
     if (!chat) {
       return res.status(400).json({ message: "Chat not found" });
     }
@@ -154,7 +163,10 @@ export const getGroupChatbyUser = async (req, res) => {
     const chats = await Chat.find({ users: userId, isGroup: true })
       .populate("users", "name lastname username profilePicture")
       .populate("messages", "message sendby createdAt")
-      .populate({ path: "messages", populate: { path: "sendby",select:"_id username" } });
+      .populate({
+        path: "messages",
+        populate: { path: "sendby", select: "_id username" },
+      });
     if (!chats) {
       return res.status(400).json({ message: "Chats not found" });
     }
@@ -164,7 +176,7 @@ export const getGroupChatbyUser = async (req, res) => {
       let usering;
       if (chat.isGroup === true) {
         usering = chat.users.filter((user) => user._id.toString() !== userId);
-      } 
+      }
       return {
         _id: chat._id,
         users: usering,
@@ -185,34 +197,37 @@ export const getGroupChatbyId = async (req, res) => {
   const chatId = req.params.id;
   const userId = req.user.id;
   try {
-    const chats = await Chat.findById(chatId ,{ isGroup: true })
-    .populate("users", "name lastname username profilePicture")
-    .populate("messages", "message sendby createdAt")
-    .populate({ path: "messages", populate: { path: "sendby",select:"_id username" } });
-  if (!chats) {
-    return res.status(400).json({ message: "Chats not found" });
-  }
-  let forMap = [];
+    const chats = await Chat.findById(chatId, { isGroup: true })
+      .populate("users", "name lastname username profilePicture")
+      .populate("messages", "message sendby createdAt")
+      .populate({
+        path: "messages",
+        populate: { path: "sendby", select: "_id username" },
+      });
+    if (!chats) {
+      return res.status(400).json({ message: "Chats not found" });
+    }
+    let forMap = [];
     forMap.push(chats);
-  let chat = forMap?.map((chat) => {
-    let usering;
-    if (chat.isGroup === true) {
-      usering = chat.users.filter((user) => user._id.toString() !== userId);
-    } 
-    return {
-      _id: chat._id,
-      users: usering,
-      groupName: chat.groupName,
-      messages: chat.messages,
-      updatedAt: chat.updatedAt,
-      groupDp: chat.groupDp,
-      isGroup: chat.isGroup,
-    };
-  });
-  return res.status(200).json(chat);
-} catch (error) {
-  return res.status(500).json({ message: error.message });
-}
+    let chat = forMap?.map((chat) => {
+      let usering;
+      if (chat.isGroup === true) {
+        usering = chat.users.filter((user) => user._id.toString() !== userId);
+      }
+      return {
+        _id: chat._id,
+        users: usering,
+        groupName: chat.groupName,
+        messages: chat.messages,
+        updatedAt: chat.updatedAt,
+        groupDp: chat.groupDp,
+        isGroup: chat.isGroup,
+      };
+    });
+    return res.status(200).json(chat);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 export const updateGroupChat = async (req, res) => {
@@ -288,7 +303,7 @@ export const removeGroupUser = async (req, res) => {
   const groupId = req.params.id;
   const { userId } = req.body;
   try {
-    if(userId === req.user.id){
+    if (userId === req.user.id) {
       return res.status(400).json({ message: "You can't remove yourself" });
     }
     const chat = await Chat.findById(groupId);

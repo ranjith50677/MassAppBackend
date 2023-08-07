@@ -12,7 +12,8 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default:"https://res.cloudinary.com/demxjipir/image/upload/v1690887105/Profile%20Images%20Mass_APP/bfihpwhhbhyiytmhj36b.jpg",
+      default:
+        "https://res.cloudinary.com/demxjipir/image/upload/v1690887105/Profile%20Images%20Mass_APP/bfihpwhhbhyiytmhj36b.jpg",
     },
     lastSeen: {
       type: Date,
@@ -30,14 +31,18 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    following:[{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    }],
-    followers:[{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    }],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true, // timestamps: true adds createdAt and updatedAt fields automatically to the schema object

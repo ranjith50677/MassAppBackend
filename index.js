@@ -19,16 +19,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-
-  // socket.on("typing", (room) => socket.in(room).emit("typing"));
-  // socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
-  // socket.on("disconnect", () => console.log("Disconnected from socket.io"));
-  // socket.off("setup", () => {
-  //   console.log("USER DISCONNECTED");
-  //   socket.leave(userData._id);
-  // });
-
-
 mongoose.set("strictQuery", false);
 mongoose
   .connect("mongodb://127.0.0.1:27017/masssmedia")
@@ -47,7 +37,7 @@ app.use("/api/message", message);
 app.use("/api/chat", chat);
 
 const port = process.env.PORT || 7373;
-const server=app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log("Server connected to " + port);
 });
 
@@ -72,5 +62,4 @@ io.on("connection", (socket) => {
     console.log("USER DISCONNECTED");
     socket.leave(userData._id);
   });
-}
-);
+});

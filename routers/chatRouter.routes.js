@@ -1,22 +1,22 @@
 import express from "express";
 import {
-    createGroup,
-    getChatbyuser,
-    updateGroupChat,
-    deleteChat,
-    addMessage,
-    deleteMessage,
-    updateMessage,
-    addGroupAdmin,
-    removeGroupAdmin,
-    addGroupUser,
-    removeGroupUser,
-    getChatbyId,
-    updateDp,
-    createSingleChat,
-    getGroupChatbyUser,
-    getGroupChatbyId,
-    getChat
+  createGroup,
+  getChatbyuser,
+  updateGroupChat,
+  deleteChat,
+  addMessage,
+  deleteMessage,
+  updateMessage,
+  addGroupAdmin,
+  removeGroupAdmin,
+  addGroupUser,
+  removeGroupUser,
+  getChatbyId,
+  updateDp,
+  createSingleChat,
+  getGroupChatbyUser,
+  getGroupChatbyId,
+  getChat,
 } from "../controllers/chatController.js";
 import auth from "../middleware/auth.js";
 
@@ -41,8 +41,6 @@ router.post("/addadmin/:id", auth, addGroupAdmin);
 router.delete("/removeadmin/:id", auth, removeGroupAdmin);
 router.post("/adduser/:id", auth, addGroupUser);
 router.delete("/removeuser/:id", auth, removeGroupUser);
-
-
 
 //common for both single and group chat//
 router.delete("/deletechat/:id", auth, deleteChat);
