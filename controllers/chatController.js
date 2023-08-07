@@ -298,11 +298,11 @@ export const addGroupUser = async (req, res) => {
   }
   try {
     const chat = await Chat.findById(groupId);
-
     const iterator = userId.values();
     for (const data of iterator) {
-      chat.users.push(data);
+      chat?.users?.push(data);
     }
+
     await chat.save();
     return res.status(200).json({ message: "Group user added successfully" });
   } catch (error) {
@@ -317,12 +317,17 @@ export const removeGroupUser = async (req, res) => {
     if (userId === req.user.id) {
       return res.status(400).json({ message: "You can't remove yourself" });
     }
-    const chat = await Chat.findById(groupId,{
-      $pull: { users: userId },
-    },{
-      multi: true,
-      new: true
-    });
+    const chat= await Chat.findByIdAndUpdate(groupId);
+    if (!chat) {
+      return res.status(400).json({ message: "Chat not found" });
+    };
+    const iterator = userId.values();
+    for (const data of iterator) {
+      chat?.users?.pull(data);
+    }
+    if(chat.users !== userId){
+      return res.status(400).json({ message: "User already removed" });
+    }
     await chat.save();
     return res.status(200).json({ message: "Group users removed successfully" });
   } catch (error) {
