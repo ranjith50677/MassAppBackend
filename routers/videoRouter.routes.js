@@ -33,7 +33,6 @@ router.delete("/delete/:id", deleteVideoById);
 router.get("/user/byid/:id", getVideoByUserId);
 router.get("/getvideo/user", auth, getVideoByUser);
 
-
 //Like routes//
 
 router.put("/like/:id", auth, likeVideo);

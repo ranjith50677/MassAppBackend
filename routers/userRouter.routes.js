@@ -19,9 +19,8 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-
 //Profile routes//
-router.get("/profile",auth, Profile);
+router.get("/profile", auth, Profile);
 router.put("/updateprofile", auth, updateProfile);
 
 //User routes//
@@ -35,7 +34,6 @@ router.delete("/delete/:id", deleteUserById);
 //Owner routes//
 router.post("/ownerreg", OwnerReg);
 router.get("/owner", getOwner);
-
 
 //Follow routes//
 router.put("/follow/:id", auth, followingUser);

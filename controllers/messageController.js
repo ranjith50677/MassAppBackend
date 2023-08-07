@@ -1,12 +1,11 @@
 import Chat from "../models/chatModel.js";
 import Message from "../models/messageModel.js";
 
-
 export const createMessage = async (req, res) => {
   const message = req.body.message;
   const sendby = req.user.id;
   const chatId = req.params.id;
-  if(!message){
+  if (!message) {
     return res.status(400).json({ message: "Message is required" });
   }
   try {
@@ -15,13 +14,15 @@ export const createMessage = async (req, res) => {
       return res.status(400).json({ message: "Chat not found" });
     }
     if (chat) {
-      if(!chat?.users?.includes(sendby)){
-        return res.status(400).json({ message: "You are not a authenticated person" });
+      if (!chat?.users?.includes(sendby)) {
+        return res
+          .status(400)
+          .json({ message: "You are not a authenticated person" });
       }
       const newMessage = new Message({
         message: message,
         sendby: sendby,
-      }); 
+      });
       await newMessage.save();
       chat.lastMessage = newMessage._id;
       chat.messages.push(newMessage);
@@ -82,4 +83,4 @@ export const getMessage = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}
+};

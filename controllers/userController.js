@@ -28,7 +28,7 @@ export const reg = async (req, res) => {
       .status(400)
       .json({ message: "username already exists. Please Try Another" });
 
-  bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
+  bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {x
     try {
       let register = await new User({
         username: username,
@@ -54,7 +54,7 @@ export const login = async (req, res) => {
   if (foundUser) {
     bcrypt.compare(req.body.password, foundUser.password, (err, result) => {
       if (result) {
-        try {
+        try { vc
           const token = jwt.sign({ id: foundUser?._id }, process.env.JWT, {
             expiresIn: "4h",
           });
@@ -239,7 +239,7 @@ export const followingUser = async (req, res) => {
 export const unfollowingUser = async (req, res) => {
   try {
     let check = await User.findOne({
-      _id:req.user.id,
+      _id: req.user.id,
       following: req.params.id,
     });
     if (!check) {
@@ -269,7 +269,7 @@ export const unfollowingUser = async (req, res) => {
 
 export const getFollowing = async (req, res) => {
   try {
-    let user = await User.findByOne({ $in: { following: req.user.id } });
+    let user = await User.findOne({ $in: { following: req.user.id } });
     res.status(200).json({ user });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -278,7 +278,7 @@ export const getFollowing = async (req, res) => {
 
 export const getFollowers = async (req, res) => {
   try {
-    let user = await User.findByOne({ $in: { followers: req.user.id } });
+    let user = await User.findOne({ $in: { followers: req.user.id } });
     res.status(200).json({ user });
   } catch (error) {
     res.status(400).json({ message: error.message });
