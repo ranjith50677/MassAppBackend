@@ -319,6 +319,9 @@ export const removeGroupUser = async (req, res) => {
     }
     const chat = await Chat.findById(groupId,{
       $pull: { users: userId },
+    },{
+      multi: true,
+      new: true
     });
     await chat.save();
     return res.status(200).json({ message: "Group users removed successfully" });
