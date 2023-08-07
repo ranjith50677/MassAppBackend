@@ -197,7 +197,7 @@ export const getGroupChatbyId = async (req, res) => {
   const chatId = req.params.id;
   const userId = req.user.id;
   try {
-    const chats = await Chat.findById(chatId, { isGroup: true })
+    const chats = await Chat.findById({chatId,  isGroup: true })
       .populate("users", "name lastname username profilePicture")
       .populate("messages", "message sendby createdAt")
       .populate({
