@@ -15,9 +15,7 @@ export const createMessage = async (req, res) => {
     }
     if (chat) {
       if (!chat?.users?.includes(sendby)) {
-        return res
-          .status(400)
-          .json({ message: "You are not a authenticated person" });
+        return res.status(400).json({ message: "You are not a authenticated person" });
       }
       const newMessage = new Message({
         message: message,
@@ -64,9 +62,7 @@ export const deleteMessage = async (req, res) => {
     chat.messages.splice(index, 1);
     await chat.save();
     const result = await Message.findByIdAndDelete(messageId);
-    return res
-      .status(200)
-      .json({ message: "Message deleted successfully", result });
+    return res.status(200).json({ message: "Message deleted successfully", result });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

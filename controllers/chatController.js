@@ -197,7 +197,7 @@ export const getGroupChatbyId = async (req, res) => {
   const chatId = req.params.id;
   const userId = req.user.id;
   try {
-    const chats = await Chat.findById(chatId, { isGroup: true })
+    const chats = await Chat.findById({chatId,  isGroup: true })
       .populate("users", "name lastname username profilePicture")
       .populate("messages", "message sendby createdAt")
       .populate({
@@ -288,10 +288,13 @@ export const removeGroupAdmin = async (req, res) => {
 
 export const addGroupUser = async (req, res) => {
   const groupId = req.params.id;
-  const { userId } = req.body;
+  const userId = req.body.userId;
+  let data = userId?.map(()=>{
+    return userId
+  })
   try {
     const chat = await Chat.findById(groupId);
-    chat.users.push(userId);
+    chat.users.push(data);
     await chat.save();
     return res.status(200).json({ message: "Group user added successfully" });
   } catch (error) {
@@ -301,7 +304,7 @@ export const addGroupUser = async (req, res) => {
 
 export const removeGroupUser = async (req, res) => {
   const groupId = req.params.id;
-  const { userId } = req.body;
+  const userId = req.body.userId;
   try {
     if (userId === req.user.id) {
       return res.status(400).json({ message: "You can't remove yourself" });
