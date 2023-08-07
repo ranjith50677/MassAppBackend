@@ -50,16 +50,32 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
-  socket.on("setup", (userData) => {
-    socket.join(userData._id);
+
+  socket.on("setup",(userData) => {
+    socket.join(userData.id);
+    console.log(`A user Connected ${userData.id}`);
     socket.emit("connected");
   });
-  socket.on("join room", (room) => socket.join(room));
-  socket.on("typing", (room) => socket.in(room).emit("typing"));
-  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
-  socket.on("disconnect", () => console.log("Disconnected from socket.io"));
-  socket.off("setup", () => {
-    console.log("USER DISCONNECTED");
-    socket.leave(userData._id);
+
+  socket.on("join chat", (room) => {
+    socket.join(room)
+    // console.log(`A user joined a chat ${room}`);
   });
+
+  socket.on("new message", (newMessageRecieved) => {
+    var chat = newMessageRecieved.data.lastMessage;
+    if (!chat) return console.log("Chat.users not defined");
+    newMessageRecieved?.data?.users?.forEach((user) => {
+      if (user._id == chat) return;
+      socket.in(user._id).emit("message recieved", newMessageRecieved);
+    });
+  })
+
+  // socket.on("typing", (room) => socket.in(room).emit("typing"));
+  // socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+  // socket.on("disconnect", () => console.log("Disconnected from socket.io"));
+  // socket.off("setup", () => {
+  //   console.log("USER DISCONNECTED");
+  //   socket.leave(userData._id);
+  // });
 });

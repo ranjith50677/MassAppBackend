@@ -23,14 +23,11 @@ export const reg = async (req, res) => {
   let exName = await User.findOne({
     username: username,
   });
-  if (exName)
-    return res
-      .status(400)
-      .json({ message: "username already exists. Please Try Another" });
+  if (exName) return res.status(400).json({ message: "Username already exists. Please Try Another" });
 
   bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {x
     try {
-      let register = await new User({
+      let register = new User({
         username: username,
         email: email?.toLowerCase(),
         password: hash,
@@ -46,15 +43,16 @@ export const reg = async (req, res) => {
 
 export const login = async (req, res) => {
   let email = req.body.email?.toLowerCase();
+  let password = req.body.password;
   let foundUser = await User.findOne({ email: email });
-  if (!req.body.email)
+  if (!email)
     return res.status(400).json({ message: "please enter email" });
-  if (!req.body.password)
+  if (!password)
     return res.status(400).json({ message: "please enter password" });
   if (foundUser) {
     bcrypt.compare(req.body.password, foundUser.password, (err, result) => {
       if (result) {
-        try { vc
+        try { 
           const token = jwt.sign({ id: foundUser?._id }, process.env.JWT, {
             expiresIn: "4h",
           });
@@ -137,12 +135,10 @@ export const OwnerReg = async (req, res) => {
     username: username,
   });
   if (exName)
-    return res
-      .status(400)
-      .json({ message: "username already exists. Please Try Another" });
+    return res.status(400).json({ message: "username already exists. Please Try Another" });
   bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
     try {
-      let register = await new User({
+      let register = new User({
         username: username,
         email: email?.toLowerCase(),
         password: hash,
@@ -170,7 +166,6 @@ export const getOwner = async (req, res) => {
 
 export const Profile = async (req, res) => {
   try {
-    console.log(req.user);
     const id = req.user._id;
     const view = await User.findById({ _id: id }).select("-password");
     if (!view) return res.status(404).json({ message: "user not found" });

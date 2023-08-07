@@ -4,13 +4,24 @@ import Video from "../models/videoModel.js";
 //Video routes//
 
 export const createVideo = async (req, res) => {
+  const title = req.body.title;
+  const description = req.body.description;
+  const videoUrl = req.body.videoUrl;
+  const public_id = req.body.public_id;
+  const category = req.body.category;
+
+  if (!title) return res.status(400).json({ message: "please enter title" });
+  if (!description) return res.status(400).json({ message: "please enter description" });
+  if (!videoUrl) return res.status(400).json({ message: "please enter videoUrl" });
+  if (!category) return res.status(400).json({ message: "please enter category" });
+
   try {
     let video = new Video({
-      title: req.body.title,
-      description: req.body.description,
-      videoUrl: req.body.videoUrl,
-      public_id: req.body.public_id,
-      category: req.body.category,
+      title: title,
+      description: description,
+      videoUrl: videoUrl,
+      public_id: public_id,
+      category: category,
       postedBy: req.user._id,
     });
     let videoSaved = await video.save();
@@ -43,14 +54,24 @@ export const getVideoById = async (req, res) => {
 };
 
 export const updateVideoById = async (req, res) => {
+  const id = req.params.id;
+  const title = req.body.title;
+  const description = req.body.description;
+  const videoUrl = req.body.videoUrl;
+  const category = req.body.category;
+
+  if (!title) return res.status(400).json({ message: "please enter title" });
+  if (!description) return res.status(400).json({ message: "please enter description" });
+  if (!videoUrl) return res.status(400).json({ message: "please enter videoUrl" });
+  if (!category) return res.status(400).json({ message: "please enter category" });
   try {
     let video = await Video.findByIdAndUpdate(
-      req.params.id,
+      id,
       {
-        title: req.body.title,
-        description: req.body.description,
-        videoUrl: req.body.videoUrl,
-        category: req.body.category,
+        title: title,
+        description: description,
+        videoUrl: videoUrl, 
+        category: category,
       },
       { new: true }
     );
